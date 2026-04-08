@@ -39,6 +39,6 @@
 }
 
 .vinyl-record {
-  @apply rounded-full aspect-square bg-gradient-to-br from-neutral-900 to-black shadow-2xl;
+  @apply rounded-full aspect-square bg-gradient-to-br from-neutral-800 to-black shadow-2xl;
 }
 

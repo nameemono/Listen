@@ -110,7 +110,7 @@ const FAQSection = () => {
         <div className="mt-24 text-center">
           <div className="relative inline-block group">
             <a
-              href="https://wa.me/60123456789" // Placeholder number, user can update
+              href="https://wa.me/60126442264"
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col items-center gap-4 group"

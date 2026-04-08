@@ -113,7 +113,7 @@ export default function SocialMagicButton() {
       {/* Tooltip */}
       <motion.div 
         initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: isHovered ? 0 : 1, x: 0 }}
+        animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : 20 }}
         className="absolute right-20 top-1/2 -translate-y-1/2 bg-brand-black/80 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-lg pointer-events-none whitespace-nowrap"
       >
         <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-orange">Connect with us</p>

@@ -21,7 +21,10 @@ import {
   Users,
   Info,
   Phone,
-  Utensils
+  Utensils,
+  Facebook,
+  Mail,
+  MessageCircle
 } from 'lucide-react';
 
 import CinematicSwitch from './components/ui/cinematic-glow-toggle';
@@ -359,9 +362,9 @@ const PricingTable = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <div className="min-w-[700px] bg-white/[0.03] rounded-sm border border-white/5 overflow-hidden">
+          <div className="min-w-[700px] rounded-sm border border-white/5 overflow-hidden">
             {/* Table Header */}
-            <div className="grid grid-cols-4 border-b border-white/10 p-12">
+            <div className="grid grid-cols-4 border-b border-white/10 p-12 bg-white/[0.05]">
               <div className="flex items-end pb-4">
                 <span className="text-[10px] uppercase tracking-[0.2em] text-brand-white/40">Features</span>
               </div>
@@ -375,7 +378,7 @@ const PricingTable = () => {
                         whileInView={{ opacity: 1, scale: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.1 + idx * 0.1 }}
-                        className="absolute w-14 h-14 vinyl-record flex items-center justify-center border border-white/5 shadow-2xl"
+                        className="absolute w-14 h-14 vinyl-record flex items-center justify-center border border-white/40 shadow-2xl"
                         style={{ 
                           left: `calc(50% - 28px + ${idx * 8}px)`,
                           top: `calc(50% - 28px - ${idx * 4}px)`,
@@ -388,8 +391,8 @@ const PricingTable = () => {
                           <div className="w-1 h-1 bg-brand-black rounded-full" />
                         </div>
                         {/* Subtle Grooves Effect */}
-                        <div className="absolute inset-1 rounded-full border border-white/5 pointer-events-none" />
-                        <div className="absolute inset-2 rounded-full border border-white/5 pointer-events-none" />
+                        <div className="absolute inset-1 rounded-full border border-white/10 pointer-events-none" />
+                        <div className="absolute inset-2 rounded-full border border-white/10 pointer-events-none" />
                       </motion.div>
                     ))}
                   </div>
@@ -404,7 +407,7 @@ const PricingTable = () => {
               {features.map((feature, i) => (
                 <div 
                   key={i} 
-                  className={`grid grid-cols-4 py-5 px-12 transition-colors hover:bg-white/5 ${i % 2 === 0 ? 'bg-white/[0.02]' : ''}`}
+                  className={`grid grid-cols-4 py-5 px-12 transition-colors hover:bg-white/5 ${i % 2 === 1 ? 'bg-white/[0.05]' : ''}`}
                 >
                   <div className="text-xs text-brand-white/60 flex items-center">
                     {feature.label}
@@ -646,11 +649,57 @@ const Booking = () => {
   );
 };
 
+const Press = () => {
+  const logos = [
+    { name: "The Rakyat Post", url: "https://www.therakyatpost.com/wp-content/webp-express/webp-images/uploads/2019/12/TRP_SW-scaled-min.png.webp" },
+    { name: "EatDrinkKL", url: "https://www.eatdrinkkl.com/assets/edkl-logo-9696bb3351897f330936927f06a5f53444fec18d3c9078e8fbea532dac6d5234.png" },
+    { name: "Says", url: "https://says.com/my/_next/image?url=%2Fmy%2Fimages%2Flogo.png&w=1920&q=75" },
+    { name: "Newswav", url: "https://newswav.com/_ipx/q_80&s_127x24/https://cdn.newswav.com/branding/logo/newswav.png" }
+  ];
+
+  return (
+    <section className="py-20 bg-brand-black border-t border-white/5">
+      <div className="max-w-5xl mx-auto px-6">
+        <p className="text-center text-[10px] uppercase tracking-[0.3em] text-brand-white/30 mb-12">Featured In</p>
+        <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20">
+          {logos.map((logo, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="h-8 md:h-10 flex items-center justify-center grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+            >
+              <img 
+                src={logo.url} 
+                alt={logo.name} 
+                className="max-h-full w-auto object-contain"
+                referrerPolicy="no-referrer"
+              />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const Footer = () => {
+  const navLinks = [
+    { name: "Concept", href: "#concept" },
+    { name: "Space", href: "#space" },
+    { name: "Tiers", href: "#pricing" },
+    { name: "Menu", href: "#menu" },
+    { name: "FAQ", href: "#faq" },
+    { name: "Guidelines", href: "#guidelines" },
+    { name: "Location", href: "#location" }
+  ];
+
   return (
     <footer className="py-20 bg-brand-orange text-brand-black border-t border-black/5">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-4 gap-12 mb-20">
+        <div className="grid md:grid-cols-5 gap-12 mb-20">
           <div className="col-span-2">
             <div className="mb-8">
               <img 
@@ -668,21 +717,47 @@ const Footer = () => {
           <div>
             <h4 className="text-[10px] uppercase tracking-[0.3em] text-brand-black/40 mb-6 font-bold">Visit</h4>
             <address className="not-italic text-sm text-brand-black/80 space-y-2">
-              <p>Chow Kit, Kuala Lumpur</p>
-              <p>50350 Malaysia</p>
-              <p className="pt-4">Closed on Mondays</p>
+              <p>10, Jalan Kamunting,</p>
+              <p>Chow Kit, 50300 Kuala Lumpur,</p>
+              <p>Wilayah Persekutuan Kuala Lumpur</p>
+              <p className="pt-4 font-medium">Closed on Mondays</p>
             </address>
+          </div>
+
+          <div>
+            <h4 className="text-[10px] uppercase tracking-[0.3em] text-brand-black/40 mb-6 font-bold">Explore</h4>
+            <ul className="space-y-3">
+              {navLinks.map((link) => (
+                <li key={link.name}>
+                  <a 
+                    href={link.href} 
+                    className="text-sm text-brand-black/80 hover:text-brand-black transition-colors"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
           
           <div>
             <h4 className="text-[10px] uppercase tracking-[0.3em] text-brand-black/40 mb-6 font-bold">Connect</h4>
             <div className="flex flex-col space-y-4">
-              <a href="#" className="flex items-center gap-3 text-sm text-brand-black/80 hover:text-brand-black transition-colors">
+              <a href="https://www.instagram.com/listenhifi.cafe" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-brand-black/80 hover:text-brand-black transition-colors">
                 <Instagram size={16} />
-                <span>@listenhifi.cafe</span>
+                <span>Instagram</span>
               </a>
-              <a href="#" className="text-sm text-brand-black/80 hover:text-brand-black transition-colors">
-                hello@listenhifi.com
+              <a href="https://www.tiktok.com/@listenhifi.cafe" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-brand-black/80 hover:text-brand-black transition-colors">
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                <span>TikTok</span>
+              </a>
+              <a href="https://www.facebook.com/listenhifi.cafe" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-brand-black/80 hover:text-brand-black transition-colors">
+                <Facebook size={16} />
+                <span>Facebook</span>
+              </a>
+              <a href="https://wa.me/60126442264" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-brand-black/80 hover:text-brand-black transition-colors pt-2 border-t border-black/5">
+                <MessageCircle size={16} />
+                <span>Contact Us</span>
               </a>
             </div>
           </div>
@@ -729,7 +804,7 @@ const GuidelinesSection = () => {
         "Each listening station is designed for 1–3 guests to keep the experience comfortable.",
         "For 4 guests, please make 2 bookings (2+2). For 5 guests, make 2 bookings (3+2).",
         "Walk-ins are welcome depending on seat availability.",
-        "For special inquiries, feel free to contact us via WhatsApp."
+        <span>For special inquiries, feel free to contact us via <a href="https://wa.me/60126442264" target="_blank" rel="noopener noreferrer" className="text-brand-orange hover:underline">WhatsApp</a>.</span>
       ]
     },
     {
@@ -919,6 +994,7 @@ export default function App() {
         <FAQSection />
         <GuidelinesSection />
         <Booking />
+        <Press />
         <MapSection />
         <Footer />
         <SocialMagicButton />
