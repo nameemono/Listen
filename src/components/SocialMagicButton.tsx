@@ -40,6 +40,9 @@ const socialLinks = [
 
 export default function SocialMagicButton() {
   const [isHovered, setIsHovered] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const showSocials = isHovered || isOpen;
 
   return (
     <div 
@@ -48,7 +51,7 @@ export default function SocialMagicButton() {
       onMouseLeave={() => setIsHovered(false)}
     >
       <AnimatePresence>
-        {isHovered && (
+        {showSocials && (
           <motion.div 
             initial={{ opacity: 0, y: 20, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -70,6 +73,7 @@ export default function SocialMagicButton() {
                 whileHover={{ scale: 1.1, x: -5 }}
                 className={`${social.color} text-white p-3 rounded-full shadow-xl flex items-center justify-center border border-white/20 hover:shadow-brand-orange/20`}
                 title={social.name}
+                onClick={(e) => e.stopPropagation()}
               >
                 {social.icon}
               </motion.a>
@@ -79,12 +83,13 @@ export default function SocialMagicButton() {
       </AnimatePresence>
 
       <motion.button
+        onClick={() => setIsOpen(!isOpen)}
         className="relative w-16 h-16 bg-[#080808] rounded-full shadow-2xl flex items-center justify-center border-2 border-brand-orange group overflow-hidden"
-        animate={{ rotate: isHovered ? 360 : 0 }}
+        animate={{ rotate: showSocials ? 360 : 0 }}
         transition={{ 
           rotate: { 
-            duration: isHovered ? 3 : 0.5, 
-            repeat: isHovered ? Infinity : 0, 
+            duration: showSocials ? 3 : 0.5, 
+            repeat: showSocials ? Infinity : 0, 
             ease: "linear" 
           } 
         }}
@@ -104,7 +109,7 @@ export default function SocialMagicButton() {
         </div>
 
         <Disc 
-          className={`text-brand-orange/40 transition-transform duration-500 ${isHovered ? 'scale-110' : 'scale-100'}`} 
+          className={`text-brand-orange/40 transition-transform duration-500 ${showSocials ? 'scale-110' : 'scale-100'}`} 
           size={48} 
           strokeWidth={1}
         />
@@ -113,7 +118,7 @@ export default function SocialMagicButton() {
       {/* Tooltip */}
       <motion.div 
         initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : 20 }}
+        animate={{ opacity: showSocials ? 1 : 0, x: showSocials ? 0 : 20 }}
         className="absolute right-20 top-1/2 -translate-y-1/2 bg-brand-black/80 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-lg pointer-events-none whitespace-nowrap"
       >
         <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-orange">Connect with us</p>

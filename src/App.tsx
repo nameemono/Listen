@@ -361,7 +361,58 @@ const PricingTable = () => {
           <h2 className="text-4xl md:text-5xl font-display font-light italic font-serif">Listening Tiers</h2>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Mobile View: Stacked Cards */}
+        <div className="md:hidden space-y-12">
+          {tiers.map((tier, i) => (
+            <div key={i} className="bg-white/[0.03] rounded-sm border border-white/5 overflow-hidden">
+              <div className="p-8 border-b border-white/10 bg-white/[0.05] flex flex-col items-center">
+                <div className="relative w-24 h-20 mb-6 flex items-center justify-center">
+                  {[...Array(i + 1)].map((_, idx) => (
+                    <motion.div 
+                      key={idx}
+                      initial={{ opacity: 0, scale: 0.8, x: -10 }}
+                      whileInView={{ opacity: 1, scale: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1 + idx * 0.1 }}
+                      className="absolute w-14 h-14 vinyl-record flex items-center justify-center border border-white/40 shadow-2xl"
+                      style={{ 
+                        left: `calc(50% - 28px + ${idx * 8}px)`,
+                        top: `calc(50% - 28px - ${idx * 4}px)`,
+                        zIndex: 10 - idx 
+                      }}
+                    >
+                      {/* White Inner Label */}
+                      <div className="w-5 h-5 bg-brand-white rounded-full flex items-center justify-center shadow-inner">
+                        {/* Spindle Hole */}
+                        <div className="w-1 h-1 bg-brand-black rounded-full" />
+                      </div>
+                      {/* Subtle Grooves Effect */}
+                      <div className="absolute inset-1 rounded-full border border-white/10 pointer-events-none" />
+                      <div className="absolute inset-2 rounded-full border border-white/10 pointer-events-none" />
+                    </motion.div>
+                  ))}
+                </div>
+                <h3 className="text-2xl font-display font-medium mb-1">{tier.name}</h3>
+                <p className="text-brand-orange font-display text-lg font-bold">{tier.price}</p>
+                <p className="text-brand-white/40 text-[10px] uppercase tracking-widest mt-2">{tier.desc}</p>
+              </div>
+              <div className="divide-y divide-white/5">
+                {features.map((feature, j) => (
+                  <div key={j} className="flex justify-between py-4 px-8 items-center">
+                    <span className="text-[10px] uppercase tracking-widest text-brand-white/40">{feature.label}</span>
+                    <span className="text-xs font-light text-brand-white/80 text-right">
+                      {feature.values[i] === "Yes" ? <div className="w-1.5 h-1.5 bg-brand-orange rounded-full ml-auto" /> : 
+                       feature.values[i] === "No" ? <span className="opacity-20">—</span> : feature.values[i]}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop View: Existing Table */}
+        <div className="hidden md:block overflow-x-auto">
           <div className="min-w-[700px] rounded-sm border border-white/5 overflow-hidden">
             {/* Table Header */}
             <div className="grid grid-cols-4 border-b border-white/10 p-12 bg-white/[0.05]">
@@ -443,6 +494,14 @@ const MenuSection = ({
 }) => {
   const [isFullMenu, setIsFullMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
+
+  const handleMenuClick = (name: string) => {
+    onDrinkClick(name);
+    if (isFullMenu && previewRef.current) {
+      previewRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
 
   const featuredDrinks = [
     { name: "Matcha Strawberry", hot: "15", iced: "16.5", image: "https://i.postimg.cc/tgQjpNpR/Screenshot_2026_04_08_143740.png" },
@@ -527,10 +586,13 @@ const MenuSection = ({
               <div className="grid md:grid-cols-3 gap-16 mb-24">
                 {/* Coffee */}
                 <div>
-                  <h3 className="text-brand-orange text-[10px] uppercase tracking-[0.3em] font-bold mb-10 border-b border-brand-orange/20 pb-4">Coffee</h3>
+                  <div className="flex justify-between items-end mb-10 border-b border-brand-orange/20 pb-4">
+                    <h3 className="text-brand-orange text-[10px] uppercase tracking-[0.3em] font-bold">Coffee</h3>
+                    <span className="text-[8px] text-brand-white/20 uppercase tracking-widest italic">Click for preview</span>
+                  </div>
                   <div className="space-y-6">
                     {fullMenu.coffee.map((item, i) => (
-                      <div key={i} className="flex justify-between items-end group cursor-pointer" onClick={(e) => { e.stopPropagation(); onDrinkClick(item.name); }}>
+                      <div key={i} className="flex justify-between items-end group cursor-pointer" onClick={(e) => { e.stopPropagation(); handleMenuClick(item.name); }}>
                         <span className="text-brand-white/80 font-display group-hover:text-brand-white transition-colors">{item.name}</span>
                         <div className="flex gap-4 text-xs font-mono text-brand-orange">
                           {item.hot && <div className="flex flex-col items-center"><span className="text-[8px] text-brand-white/20 uppercase mb-1">hot</span>{item.hot}</div>}
@@ -543,10 +605,13 @@ const MenuSection = ({
 
                 {/* Non-Coffee */}
                 <div>
-                  <h3 className="text-brand-orange text-[10px] uppercase tracking-[0.3em] font-bold mb-10 border-b border-brand-orange/20 pb-4">Non-Coffee</h3>
+                  <div className="flex justify-between items-end mb-10 border-b border-brand-orange/20 pb-4">
+                    <h3 className="text-brand-orange text-[10px] uppercase tracking-[0.3em] font-bold">Non-Coffee</h3>
+                    <span className="text-[8px] text-brand-white/20 uppercase tracking-widest italic">Click for preview</span>
+                  </div>
                   <div className="space-y-6">
                     {fullMenu.nonCoffee.map((item, i) => (
-                      <div key={i} className="flex justify-between items-end group cursor-pointer" onClick={(e) => { e.stopPropagation(); onDrinkClick(item.name); }}>
+                      <div key={i} className="flex justify-between items-end group cursor-pointer" onClick={(e) => { e.stopPropagation(); handleMenuClick(item.name); }}>
                         <span className="text-brand-white/80 font-display group-hover:text-brand-white transition-colors">{item.name}</span>
                         <div className="flex gap-4 text-xs font-mono text-brand-orange">
                           {item.hot && <div className="flex flex-col items-center"><span className="text-[8px] text-brand-white/20 uppercase mb-1">hot</span>{item.hot}</div>}
@@ -559,10 +624,13 @@ const MenuSection = ({
 
                 {/* Teas */}
                 <div className="flex flex-col h-full">
-                  <h3 className="text-brand-orange text-[10px] uppercase tracking-[0.3em] font-bold mb-10 border-b border-brand-orange/20 pb-4">Classic Teas</h3>
+                  <div className="flex justify-between items-end mb-10 border-b border-brand-orange/20 pb-4">
+                    <h3 className="text-brand-orange text-[10px] uppercase tracking-[0.3em] font-bold">Classic Teas</h3>
+                    <span className="text-[8px] text-brand-white/20 uppercase tracking-widest italic">Click for preview</span>
+                  </div>
                   <div className="space-y-6 mb-12">
                     {fullMenu.teas.map((item, i) => (
-                      <div key={i} className="flex justify-between items-end group cursor-pointer" onClick={(e) => { e.stopPropagation(); onDrinkClick(item.name); }}>
+                      <div key={i} className="flex justify-between items-end group cursor-pointer" onClick={(e) => { e.stopPropagation(); handleMenuClick(item.name); }}>
                         <span className="text-brand-white/80 font-display group-hover:text-brand-white transition-colors">{item.name}</span>
                         <div className="flex gap-4 text-xs font-mono text-brand-orange">
                           {item.hot && <div className="flex flex-col items-center"><span className="text-[8px] text-brand-white/20 uppercase mb-1">hot</span>{item.hot}</div>}
@@ -572,7 +640,7 @@ const MenuSection = ({
                   </div>
                   
                   {/* Polaroid Stack positioned at the bottom of the 3rd column */}
-                  <div className="mt-auto pt-12">
+                  <div className="mt-auto pt-12" ref={previewRef}>
                     <PolaroidStack items={ALL_DRINKS} selectedIndex={selectedDrinkIndex} />
                   </div>
                 </div>
